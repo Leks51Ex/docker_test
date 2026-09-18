@@ -40,7 +40,7 @@ export default function Home({loaderData}: Route.ComponentProps) {
   return (
     <main className="flex items-center justify-center pt-16 pb-4">
       <div>
-      <div className="title">Docker test app_2</div>
+      <div className="title">Docker test app_3</div>
      {loaderData.ok? (
       <div className="envTitle">
         count= {loaderData.count} 

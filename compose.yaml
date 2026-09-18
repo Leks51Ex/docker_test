@@ -10,7 +10,7 @@ services:
     restart: unless-stopped
 
   web:
-    image: leks5113rus/docker-test-web:2
+    image: leks5113rus/docker-test-web:3
     build: .
     env_file:
       - .env
