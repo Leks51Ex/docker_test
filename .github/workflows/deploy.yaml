@@ -14,11 +14,11 @@ jobs:
       - run: docker build -t leks5113rus/docker-test-web:${{ github.sha }} -t leks5113rus/docker-test-web:latest .
       - run: docker push leks5113rus/docker-test-web --all-tags
       - uses: appleboy/ssh-action@v1
-  with:
-    host: ${{ secrets.SSH_HOST }}
-    username: ${{ secrets.SSH_USER }}
-    key: ${{ secrets.SSH_KEY }}
-    script: |
-      cd /opt/docker_test_app
-      docker compose pull web
-      docker compose up -d
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /opt/docker_test_app
+            docker compose pull web
+            docker compose up -d
