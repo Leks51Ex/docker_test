@@ -1,7 +1,7 @@
 name: build-image
 on:
   push:
-    branches: [master]
+    branches: [master, develop]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -11,9 +11,22 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - run: docker build -t leks5113rus/docker-test-web:${{ github.sha }} -t leks5113rus/docker-test-web:latest .
-      - run: docker push leks5113rus/docker-test-web --all-tags
-      - uses: appleboy/ssh-action@v1
+
+      - name: Build and push master
+        if: github.ref == 'refs/heads/master'
+        run: |
+          docker build -t leks5113rus/docker-test-web:${{ github.sha }} -t leks5113rus/docker-test-web:latest .
+          docker push leks5113rus/docker-test-web --all-tags
+
+      - name: Build and push develop
+        if: github.ref == 'refs/heads/develop'
+        run: |
+          docker build -t leks5113rus/docker-test-web:${{ github.sha }} -t leks5113rus/docker-test-web:develop .
+          docker push leks5113rus/docker-test-web --all-tags
+
+      - name: Deploy prod
+        if: github.ref == 'refs/heads/master'
+        uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
@@ -22,3 +35,15 @@ jobs:
             cd /opt/docker_test_app
             docker compose pull web
             docker compose up -d
+
+      - name: Deploy develop
+        if: github.ref == 'refs/heads/develop'
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /opt/docker_test_app_dev
+            docker compose -p app-dev pull web
+            docker compose -p app-dev up -d
