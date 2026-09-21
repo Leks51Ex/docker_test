@@ -1,4 +1,4 @@
-services: 
+services:
   nginx:
     image: nginx:alpine
     ports:
@@ -10,7 +10,7 @@ services:
     restart: unless-stopped
 
   web:
-    image: leks5113rus/docker-test-web:3
+    image: leks5113rus/docker-test-web:4
     build: .
     env_file:
       - .env
