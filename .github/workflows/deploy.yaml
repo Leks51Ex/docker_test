@@ -36,6 +36,7 @@ jobs:
           envs: IMAGE_TAG
           script: |
             cd /opt/docker_test_app
+            sed -i "s|image: leks5113rus/docker-test-web:.*|image: leks5113rus/docker-test-web:${IMAGE_TAG}|" compose.yaml
             docker compose pull web
             docker compose up -d
 
