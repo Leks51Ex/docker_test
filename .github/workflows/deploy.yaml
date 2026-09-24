@@ -27,10 +27,13 @@ jobs:
       - name: Deploy prod
         if: github.ref == 'refs/heads/master'
         uses: appleboy/ssh-action@v1
+        env:
+          IMAGE_TAG: ${{ github.sha }}
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
+          envs: IMAGE_TAG
           script: |
             cd /opt/docker_test_app
             docker compose pull web
